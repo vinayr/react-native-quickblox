@@ -67,8 +67,8 @@ QuickBlox.on('rtcState', (state) => {
 });
 ```
 
-References - 
-https://quickblox.com/developers/IOS
-https://github.com/QuickBlox/quickblox-ios-sdk
-https://github.com/QuickBlox/q-municate-ios
-https://github.com/githubandrewd/react-native-quickblox
+References -  
+https://quickblox.com/developers/IOS  
+https://github.com/QuickBlox/quickblox-ios-sdk  
+https://github.com/QuickBlox/q-municate-ios  
+https://github.com/githubandrewd/react-native-quickblox  
