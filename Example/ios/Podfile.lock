@@ -1,0 +1,16 @@
+PODS:
+  - QuickBlox (2.11)
+  - Quickblox-WebRTC (2.6.1):
+    - QuickBlox (>= 2.7)
+
+DEPENDENCIES:
+  - QuickBlox
+  - Quickblox-WebRTC
+
+SPEC CHECKSUMS:
+  QuickBlox: 1576c947416446da58b7b7c718b6fc11e77136c6
+  Quickblox-WebRTC: 496447d228663836d6372cdb8e63affa46fe5039
+
+PODFILE CHECKSUM: 847b6a6fbdb40c257ea3a7fb2f6e072b9bc21731
+
+COCOAPODS: 1.2.0

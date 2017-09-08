@@ -1,0 +1,5 @@
+rootProject.name = 'QBTest'
+include ':react-native-quickblox'
+project(':react-native-quickblox').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-quickblox/android')
+
+include ':app'
