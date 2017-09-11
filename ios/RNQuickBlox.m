@@ -1,9 +1,6 @@
 #import "RNQuickBlox.h"
 
-@implementation RNQuickBlox {
-    @private
-    QBChatDialog * dialog;
-}
+@implementation RNQuickBlox
 
 RCT_EXPORT_MODULE()
 
@@ -71,7 +68,7 @@ RCT_EXPORT_METHOD(joinChatDialog:(RCTPromiseResolveBlock)resolve
             if (error) {
                 reject([NSString stringWithFormat:@"%@", error], nil, nil);
             } else {
-                dialog = chatDialog;
+                self.dialog = chatDialog;
                 resolve(@"");
             }
         }];
@@ -90,7 +87,7 @@ RCT_EXPORT_METHOD(sendMessage:(NSString *)msg
     params[@"save_to_history"] = @YES;
     [message setCustomParameters:params];
     
-    [dialog sendMessage:message completionBlock:^(NSError * _Nullable error) {
+    [self.dialog sendMessage:message completionBlock:^(NSError * _Nullable error) {
         if (error) {
             reject([NSString stringWithFormat:@"%@", error], nil, nil);
         } else {
@@ -99,16 +96,36 @@ RCT_EXPORT_METHOD(sendMessage:(NSString *)msg
     }];
 }
 
-RCT_EXPORT_METHOD(audioCall:(NSArray *)userIDs
+RCT_EXPORT_METHOD(makeCall:(NSArray *)userIDs
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSArray *opponentsIDs = userIDs;
-    QBRTCSession *newSession = [[QBRTCClient instance] createNewSessionWithOpponents:opponentsIDs
-                                                                  withConferenceType:QBRTCConferenceTypeAudio];
-    NSDictionary *userInfo = @{ @"key" : @"value" };
-    [newSession startCall:userInfo];
-    
+    self.session = [[QBRTCClient instance] createNewSessionWithOpponents:userIDs
+                                                      withConferenceType:QBRTCConferenceTypeAudio];
+    [self.session startCall:nil];
+    resolve(@"");
+}
+
+RCT_EXPORT_METHOD(acceptCall:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.session acceptCall:nil];
+    resolve(@"");
+}
+
+RCT_EXPORT_METHOD(rejectCall:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.session rejectCall:nil];
+    self.session = nil;
+    resolve(@"");
+}
+
+RCT_EXPORT_METHOD(hangUpCall:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.session hangUp:nil];
+    self.session = nil;
     resolve(@"");
 }
 
@@ -119,8 +136,41 @@ RCT_EXPORT_METHOD(audioCall:(NSArray *)userIDs
 }
 
 - (void)session:(QBRTCSession *)session didChangeState:(QBRTCSessionState)state {
-    //RCTLogInfo(@"Session did change state to %tu", state);
-    [self sendEventWithName:@"rtcState" body:[NSString stringWithFormat:@"%tu",state]];
+    NSString *sessionState;
+
+    switch (state) {
+        case QBRTCSessionStateNew:
+            sessionState = @"CALL_NEW";
+            break;
+        case QBRTCSessionStatePending:
+            sessionState = @"CALL_PENDING";
+            break;
+        case QBRTCSessionStateConnecting:
+            sessionState = @"CALL_CONNECTING";
+            break;
+        case QBRTCSessionStateConnected:
+            sessionState = @"CALL_CONNECTED";
+            break;
+        case QBRTCSessionStateClosed:
+            sessionState = @"CALL_CLOSED";
+            self.session = nil;
+            break;
+        default:
+            break;
+    }
+
+    //RCTLogInfo(@"Session did change state to %@", sessionState);
+    [self sendEventWithName:@"rtcState" body:sessionState];
+}
+
+- (void)didReceiveNewSession:(QBRTCSession *)session userInfo:(NSDictionary *)userInfo {
+    //RCTLogInfo(@"didReceiveNewSession");
+    if (self.session) {
+        // we already have a video/audio call session, so we reject another one
+        [session rejectCall:nil];
+        return;
+    }
+    self.session = session;
 }
 
 - (void)dealloc {

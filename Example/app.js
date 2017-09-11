@@ -26,7 +26,6 @@ export default class QBTest extends Component {
     }
 
     QuickBlox.on('chatMessage', (msg) => {
-      console.log('QB chat message', msg);
       this.setState({
         msgRecv: this.state.msgRecv+'\n'+msg,
         status: 'RECEIVED_MESSAGE',
@@ -34,13 +33,7 @@ export default class QBTest extends Component {
     });
 
     QuickBlox.on('rtcState', (state) => {
-      switch (state) {
-        case '0': return this.setState({status: 'CALL_NEW'});
-        case '1': return this.setState({status: 'CALL_PENDING'});
-        case '2': return this.setState({status: 'CALL_CONNECTING'});
-        case '3': return this.setState({status: 'CALL_CONNECTED'});
-        case '4': return this.setState({status: 'CALL_CLOSED'});
-      }
+      this.setState({status: state});
     });
   }
 
@@ -64,12 +57,24 @@ export default class QBTest extends Component {
     }
   }
 
-  onCall = async () => {
-    try {
-      await QuickBlox.audioCall(config.callUserIDs);
-    } catch(err) {
-      throw err;
-    }
+  onMakeCall = async () => {
+    try { await QuickBlox.makeCall(config.callUserIDs) }
+    catch(err) { throw err }
+  }
+
+  onHangUpCall = async () => {
+    try { await QuickBlox.hangUpCall() }
+    catch(err) { throw err }
+  }
+
+  onAcceptCall = async () => {
+    try { await QuickBlox.acceptCall() }
+    catch(err) { throw err }
+  }
+
+  onRejectCall = async () => {
+    try { await QuickBlox.rejectCall() }
+    catch(err) { throw err }
   }
 
   onSend = async () => {
@@ -88,7 +93,10 @@ export default class QBTest extends Component {
         <Text>{this.state.status}</Text>
         <Button title="Login" onPress={this.onLogin}/>
         <Button title="Join" onPress={this.onJoin}/>
-        <Button title="Call" onPress={this.onCall}/>
+        <Button title="Make Call" onPress={this.onMakeCall}/>
+        <Button title="HangUp Call" onPress={this.onHangUpCall}/>
+        <Button title="Accept Call" onPress={this.onAcceptCall}/>
+        <Button title="Reject Call" onPress={this.onRejectCall}/>
         <TextInput
           style={{width:200,height:40,borderWidth:1}}
           onChangeText={(text) => this.setState({msgSend:text})}

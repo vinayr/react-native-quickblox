@@ -7,6 +7,8 @@
 #import <QuickbloxWebRTC/QuickbloxWebRTC.h>
 
 @interface RNQuickBlox : RCTEventEmitter <RCTBridgeModule, QBChatDelegate, QBRTCClientDelegate>
+    @property (strong, nonatomic, readwrite) QBRTCSession *session;
+    @property (nonatomic, copy) QBChatDialog *dialog;
 
 @end
   
