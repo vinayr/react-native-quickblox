@@ -45,11 +45,14 @@ QuickBlox.login(username, password);
 QuickBlox.joinChatDialog();
 ```
 ```js
-var callUserIDs = [123];
-QuickBlox.audioCall(callUserIDs);
+QuickBlox.sendMessage("Hi");
 ```
 ```js
-QuickBlox.sendMessage("Hi");
+var callUserIDs = [123];
+QuickBlox.makeCall(callUserIDs);
+QuickBlox.hangUpCall();
+QuickBlox.acceptCall();
+QuickBlox.rejectCall();
 ```
 
 ### Events
@@ -62,8 +65,8 @@ QuickBlox.on('chatMessage', (msg) => {
 - `rtcState` - RTC state changed
 ```js
 QuickBlox.on('rtcState', (state) => {
-  //'0'-CALL_NEW, '1'-CALL_PENDING, '2'-CALL_CONNECTING
-  //'3'-CALL_CONNECTED, '4'-CALL_CLOSED
+  //'CALL_NEW', 'CALL_PENDING', 'CALL_CONNECTING'
+  //'CALL_CONNECTED', 'CALL_CLOSED'
 });
 ```
 
