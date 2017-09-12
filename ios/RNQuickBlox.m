@@ -62,6 +62,7 @@ RCT_EXPORT_METHOD(joinChatDialog:(RCTPromiseResolveBlock)resolve
         
         if (!chatDialog) {
             reject(nil, @"no dialog found", nil);
+            return;
         }
 
         if (chatDialog.isJoined) {
@@ -101,7 +102,7 @@ RCT_EXPORT_METHOD(sendMessage:(NSString *)msg
     }];
 }
 
-RCT_EXPORT_METHOD(makeCall:(NSArray *)userIDs
+RCT_EXPORT_METHOD(startCall:(NSArray *)userIDs
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {

@@ -57,8 +57,8 @@ export default class QBTest extends Component {
     }
   }
 
-  onMakeCall = async () => {
-    try { await QuickBlox.makeCall(config.callUserIDs) }
+  onStartCall = async () => {
+    try { await QuickBlox.startCall(config.callUserIDs) }
     catch(err) { console.error(err) }
   }
 
@@ -93,7 +93,7 @@ export default class QBTest extends Component {
         <Text>{this.state.status}</Text>
         <Button title="Login" onPress={this.onLogin}/>
         <Button title="Join" onPress={this.onJoin}/>
-        <Button title="Make Call" onPress={this.onMakeCall}/>
+        <Button title="Start Call" onPress={this.onStartCall}/>
         <Button title="HangUp Call" onPress={this.onHangUpCall}/>
         <Button title="Accept Call" onPress={this.onAcceptCall}/>
         <Button title="Reject Call" onPress={this.onRejectCall}/>

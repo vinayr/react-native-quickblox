@@ -49,7 +49,7 @@ QuickBlox.sendMessage("Hi");
 ```
 ```js
 var callUserIDs = [123];
-QuickBlox.makeCall(callUserIDs);
+QuickBlox.startCall(callUserIDs);
 QuickBlox.hangUpCall();
 QuickBlox.acceptCall();
 QuickBlox.rejectCall();
