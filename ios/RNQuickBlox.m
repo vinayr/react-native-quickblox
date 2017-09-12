@@ -28,7 +28,7 @@ RCT_EXPORT_METHOD(initialize:(NSDictionary *)data
     [QBSettings setLogLevel:(QBLogLevel)QBLogLevelNothing]; //QBLogLevelDebug,QBLogLevelNothing
     //[QBSettings enableXMPPLogging];
     
-    resolve(@"");
+    resolve(nil);
 }
 
 RCT_EXPORT_METHOD(login:(NSString *)username
@@ -40,12 +40,12 @@ RCT_EXPORT_METHOD(login:(NSString *)username
         // Connect to chat
         [[QBChat instance] connectWithUser:user completion:^(NSError * _Nullable error) {
             if (error) {
-                //reject([NSString stringWithFormat:@"%@", error], nil, nil);
+                //reject(nil, [NSString stringWithFormat:@"%@", error], nil);
             }
-            resolve(@"");
+            resolve(nil);
         }];
     } errorBlock:^(QBResponse *response) {
-        reject([NSString stringWithFormat:@"%@", response.error], nil, nil);
+        reject(nil, [NSString stringWithFormat:@"%@", response.error], nil);
     }];
 }
 
@@ -61,19 +61,24 @@ RCT_EXPORT_METHOD(joinChatDialog:(RCTPromiseResolveBlock)resolve
         QBChatDialog *chatDialog = [dialogObjects firstObject];
         
         if (!chatDialog) {
-            reject(@"no dialog found", nil, nil);
+            reject(nil, @"no dialog found", nil);
+        }
+
+        if (chatDialog.isJoined) {
+            resolve(nil);
+            return;
         }
         
         [chatDialog joinWithCompletionBlock:^(NSError * _Nullable error) {
             if (error) {
-                reject([NSString stringWithFormat:@"%@", error], nil, nil);
+                reject(nil, [NSString stringWithFormat:@"%@", error], nil);
             } else {
                 self.dialog = chatDialog;
-                resolve(@"");
+                resolve(nil);
             }
         }];
     } errorBlock:^(QBResponse *response) {
-        reject([NSString stringWithFormat:@"%@", response.error], nil, nil);
+        reject(nil, [NSString stringWithFormat:@"%@", response.error], nil);
     }];
 }
 
@@ -89,9 +94,9 @@ RCT_EXPORT_METHOD(sendMessage:(NSString *)msg
     
     [self.dialog sendMessage:message completionBlock:^(NSError * _Nullable error) {
         if (error) {
-            reject([NSString stringWithFormat:@"%@", error], nil, nil);
+            reject(nil, [NSString stringWithFormat:@"%@", error], nil);
         } else {
-            resolve(@"");
+            resolve(nil);
         }
     }];
 }
@@ -103,14 +108,14 @@ RCT_EXPORT_METHOD(makeCall:(NSArray *)userIDs
     self.session = [[QBRTCClient instance] createNewSessionWithOpponents:userIDs
                                                       withConferenceType:QBRTCConferenceTypeAudio];
     [self.session startCall:nil];
-    resolve(@"");
+    resolve(nil);
 }
 
 RCT_EXPORT_METHOD(acceptCall:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
     [self.session acceptCall:nil];
-    resolve(@"");
+    resolve(nil);
 }
 
 RCT_EXPORT_METHOD(rejectCall:(RCTPromiseResolveBlock)resolve
@@ -118,7 +123,7 @@ RCT_EXPORT_METHOD(rejectCall:(RCTPromiseResolveBlock)resolve
 {
     [self.session rejectCall:nil];
     self.session = nil;
-    resolve(@"");
+    resolve(nil);
 }
 
 RCT_EXPORT_METHOD(hangUpCall:(RCTPromiseResolveBlock)resolve
@@ -126,7 +131,7 @@ RCT_EXPORT_METHOD(hangUpCall:(RCTPromiseResolveBlock)resolve
 {
     [self.session hangUp:nil];
     self.session = nil;
-    resolve(@"");
+    resolve(nil);
 }
 
 - (void)chatRoomDidReceiveMessage:(QBChatMessage *)message fromDialogID:(NSString *)dialogID {

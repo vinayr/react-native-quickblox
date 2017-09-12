@@ -22,7 +22,7 @@ export default class QBTest extends Component {
     try {
       await QuickBlox.initialize(appInfo);
     } catch(err) {
-      throw err;
+      console.error(err);
     }
 
     QuickBlox.on('chatMessage', (msg) => {
@@ -43,7 +43,7 @@ export default class QBTest extends Component {
       await QuickBlox.login(config.username, config.password)
       this.setState({status: 'LOGGED_IN'});
     } catch(err) {
-      throw err;
+      console.error(err);
     }
   }
 
@@ -53,28 +53,28 @@ export default class QBTest extends Component {
       await QuickBlox.joinChatDialog();
       this.setState({status: 'JOINED_CHAT'});
     } catch(err) {
-      throw err;
+      console.error(err);
     }
   }
 
   onMakeCall = async () => {
     try { await QuickBlox.makeCall(config.callUserIDs) }
-    catch(err) { throw err }
+    catch(err) { console.error(err) }
   }
 
   onHangUpCall = async () => {
     try { await QuickBlox.hangUpCall() }
-    catch(err) { throw err }
+    catch(err) { console.error(err) }
   }
 
   onAcceptCall = async () => {
     try { await QuickBlox.acceptCall() }
-    catch(err) { throw err }
+    catch(err) { console.error(err) }
   }
 
   onRejectCall = async () => {
     try { await QuickBlox.rejectCall() }
-    catch(err) { throw err }
+    catch(err) { console.error(err) }
   }
 
   onSend = async () => {
@@ -83,7 +83,7 @@ export default class QBTest extends Component {
       await QuickBlox.sendMessage(this.state.msgSend);
       this.setState({status: 'SENT_MESSAGE'});
     } catch(err) {
-      throw err;
+      console.error(err);
     }
   }
 
