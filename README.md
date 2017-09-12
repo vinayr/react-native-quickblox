@@ -18,7 +18,7 @@ Note - make sure latest version of QuickBlox is installed. If not -
   pod update Quickblox-WebRTC
 ```
 - `open <yourApp>/ios/<yourApp>.xcworkspace`
-- Go to project's `Build Settings`->`Framework Search Paths` and add -
+- Go to project's `Build Settings`->`Framework Search Paths` and add (if not already added) -
 ```
   $(PROJECT_DIR)/Pods/QuickBlox
   $(PROJECT_DIR)/Pods/Quickblox-WebRTC
@@ -69,6 +69,13 @@ QuickBlox.on('rtcState', (state) => {
   //'CALL_CONNECTED', 'CALL_CLOSED'
 });
 ```
+
+Note - Don't forget to add `ios/Pods/` to `.gitignore`
+
+Versions tested with -  
+RN - 0.47.2  
+QuickBlox - 2.11  
+Quickblox-WebRTC - 2.6.1
 
 References -  
 https://quickblox.com/developers/IOS  
