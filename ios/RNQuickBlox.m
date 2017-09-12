@@ -66,6 +66,7 @@ RCT_EXPORT_METHOD(joinChatDialog:(RCTPromiseResolveBlock)resolve
         }
 
         if (chatDialog.isJoined) {
+            self.dialog = chatDialog;
             resolve(nil);
             return;
         }
