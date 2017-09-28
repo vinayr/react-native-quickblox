@@ -30,25 +30,33 @@ Note - make sure latest version of QuickBlox is installed. If not -
 import QuickBlox from 'react-native-quickblox';
 ```
 ```js
-var appInfo = {
+let appInfo = {
   applicationID: <applicationID>,
   authKey: <authKey>,
   authSecret: <authSecret>,
-  accountKey: <accountKey>
+  accountKey: <accountKey>,
+  apiEndPoint: <apiEndPoint>,
+  chatEndPoint: <chatEndPoint>
 };
 QuickBlox.initialize(appInfo);
 ```
 ```js
+// returns session token
 QuickBlox.login(username, password);
 ```
 ```js
 QuickBlox.joinChatDialog();
 ```
 ```js
-QuickBlox.sendMessage("Hi");
+let msg = "Hi";
+let params = {
+  save_to_history: 1,
+  customParam: 123,
+};
+QuickBlox.sendMessage(msg, params);
 ```
 ```js
-var callUserIDs = [123];
+let callUserIDs = [123];
 QuickBlox.startCall(callUserIDs);
 QuickBlox.hangUpCall();
 QuickBlox.acceptCall();

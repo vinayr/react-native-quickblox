@@ -25,6 +25,8 @@ RCT_EXPORT_METHOD(initialize:(NSDictionary *)data
     [QBSettings setAuthKey:[data valueForKey:@"authKey"]];
     [QBSettings setAuthSecret:[data valueForKey:@"authSecret"]];
     [QBSettings setAccountKey:[data valueForKey:@"accountKey"]];
+    [QBSettings setApiEndpoint:[data valueForKey:@"apiEndPoint"] chatEndpoint:[data valueForKey:@"chatEndPoint"] forServiceZone:QBConnectionZoneTypeProduction];
+    [QBSettings setServiceZone:QBConnectionZoneTypeProduction];
     [QBSettings setLogLevel:(QBLogLevel)QBLogLevelNothing]; //QBLogLevelDebug,QBLogLevelNothing
     //[QBSettings enableXMPPLogging];
     
@@ -42,7 +44,8 @@ RCT_EXPORT_METHOD(login:(NSString *)username
             if (error) {
                 //reject(nil, [NSString stringWithFormat:@"%@", error], nil);
             }
-            resolve(nil);
+            NSString *token = QBSession.currentSession.sessionDetails.token;
+            resolve(token);
         }];
     } errorBlock:^(QBResponse *response) {
         reject(nil, [NSString stringWithFormat:@"%@", response.error], nil);
@@ -85,14 +88,14 @@ RCT_EXPORT_METHOD(joinChatDialog:(RCTPromiseResolveBlock)resolve
 }
 
 RCT_EXPORT_METHOD(sendMessage:(NSString *)msg
+                  params: (NSDictionary *)params
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
     QBChatMessage *message = [QBChatMessage message];
     [message setText:msg];
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"save_to_history"] = @YES;
-    [message setCustomParameters:params];
+    NSMutableDictionary *nparams = [params mutableCopy];
+    [message setCustomParameters:nparams];
     
     [self.dialog sendMessage:message completionBlock:^(NSError * _Nullable error) {
         if (error) {
