@@ -56,6 +56,9 @@ let params = {
 QuickBlox.sendMessage(msg, params);
 ```
 ```js
+QuickBlox.getMessages(limit, skip);
+```
+```js
 let callUserIDs = [123];
 QuickBlox.startCall(callUserIDs);
 QuickBlox.hangUpCall();

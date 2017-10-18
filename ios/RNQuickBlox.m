@@ -106,6 +106,21 @@ RCT_EXPORT_METHOD(sendMessage:(NSString *)msg
     }];
 }
 
+RCT_EXPORT_METHOD(getMessages:(NSInteger)limit
+                  skip:(NSInteger)skip
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    QBResponsePage *resPage = [QBResponsePage responsePageWithLimit:limit skip:skip];
+    NSDictionary *extendedRequest = @{@"sort_desc" : @"date_sent"};
+    [QBRequest messagesWithDialogID:self.dialog.ID extendedRequest:extendedRequest forPage:resPage successBlock:^(QBResponse *response, NSArray *messages, QBResponsePage *responsePage) {
+        //RCTLogInfo(@"MESSAGES RECEIVED: %@", messages);
+        resolve([self RNQBChatMessages:messages]);
+    } errorBlock:^(QBResponse *response) {
+        reject(nil, [NSString stringWithFormat:@"%@", response.error], nil);
+    }];
+}
+
 RCT_EXPORT_METHOD(startCall:(NSArray *)userIDs
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
@@ -137,6 +152,30 @@ RCT_EXPORT_METHOD(hangUpCall:(RCTPromiseResolveBlock)resolve
     [self.session hangUp:nil];
     self.session = nil;
     resolve(nil);
+}
+
+- (NSArray *)RNQBChatMessages:(NSArray<QBChatMessage *> *)messages {
+    if (!messages) {
+        return RCTNullIfNil(nil);
+    }
+    NSMutableArray *response = [NSMutableArray array];
+    for (QBChatMessage *message in messages) {
+        [response addObject:[self RNQBChatMessage:message]];
+    }
+    return response;
+}
+
+- (NSDictionary *)RNQBChatMessage:(QBChatMessage *)message {
+    if (!message) {
+        return RCTNullIfNil(nil);
+    }
+    return @{
+             @"ID": message.ID,
+             @"senderID": [NSString stringWithFormat:@"%lu", message.senderID],
+             @"dateSent": @(message.dateSent.timeIntervalSince1970 * 1000),
+             @"text": message.text,
+             @"customParameters":RCTNullIfNil(message.customParameters)
+             };
 }
 
 - (void)chatRoomDidReceiveMessage:(QBChatMessage *)message fromDialogID:(NSString *)dialogID {
