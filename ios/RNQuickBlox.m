@@ -181,7 +181,7 @@ RCT_EXPORT_METHOD(hangUpCall:(RCTPromiseResolveBlock)resolve
 - (void)chatRoomDidReceiveMessage:(QBChatMessage *)message fromDialogID:(NSString *)dialogID {
     if (message.senderID == message.recipientID) return;
     //RCTLogInfo(@"MESSAGE RECEIVED: %@", message);
-    [self sendEventWithName:@"chatMessage" body:message.text];
+    [self sendEventWithName:@"chatMessage" body:[self RNQBChatMessage:message]];
 }
 
 - (void)session:(QBRTCSession *)session didChangeState:(QBRTCSessionState)state {
