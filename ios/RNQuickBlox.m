@@ -44,8 +44,7 @@ RCT_EXPORT_METHOD(login:(NSString *)username
             if (error) {
                 //reject(nil, [NSString stringWithFormat:@"%@", error], nil);
             }
-            NSString *token = QBSession.currentSession.sessionDetails.token;
-            resolve(token);
+            resolve(nil);
         }];
     } errorBlock:^(QBResponse *response) {
         reject(nil, [NSString stringWithFormat:@"%@", response.error], nil);
@@ -88,7 +87,7 @@ RCT_EXPORT_METHOD(joinChatDialog:(RCTPromiseResolveBlock)resolve
 }
 
 RCT_EXPORT_METHOD(sendMessage:(NSString *)msg
-                  params: (NSDictionary *)params
+                  params:(NSDictionary *)params
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -106,14 +105,11 @@ RCT_EXPORT_METHOD(sendMessage:(NSString *)msg
     }];
 }
 
-RCT_EXPORT_METHOD(getMessages:(NSInteger)limit
-                  skip:(NSInteger)skip
+RCT_EXPORT_METHOD(getMessages:(NSDictionary *)filters
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    QBResponsePage *resPage = [QBResponsePage responsePageWithLimit:limit skip:skip];
-    NSDictionary *extendedRequest = @{@"sort_desc" : @"date_sent"};
-    [QBRequest messagesWithDialogID:self.dialog.ID extendedRequest:extendedRequest forPage:resPage successBlock:^(QBResponse *response, NSArray *messages, QBResponsePage *responsePage) {
+    [QBRequest messagesWithDialogID:self.dialog.ID extendedRequest:filters forPage:nil successBlock:^(QBResponse *response, NSArray *messages, QBResponsePage *responsePage) {
         //RCTLogInfo(@"MESSAGES RECEIVED: %@", messages);
         resolve([self RNQBChatMessages:messages]);
     } errorBlock:^(QBResponse *response) {

@@ -41,7 +41,6 @@ let appInfo = {
 QuickBlox.initialize(appInfo);
 ```
 ```js
-// returns session token
 QuickBlox.login(username, password);
 ```
 ```js
@@ -56,7 +55,13 @@ let params = {
 QuickBlox.sendMessage(msg, params);
 ```
 ```js
-QuickBlox.getMessages(limit, skip);
+let filters = {
+  'limit': 10,
+  'skip': 10,
+  'message[ne]': null,
+  'sort_desc': 'date_sent',
+};
+QuickBlox.getMessages(filters);
 ```
 ```js
 let callUserIDs = [123];
