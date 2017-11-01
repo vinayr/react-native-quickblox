@@ -6,7 +6,7 @@ RCT_EXPORT_MODULE()
 
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"chatMessage", @"rtcState"];
+    return @[@"chatMessage", @"rtcState", @"disconnected", @"reconnected"];
 }
 
 
@@ -27,6 +27,7 @@ RCT_EXPORT_METHOD(initialize:(NSDictionary *)data
     [QBSettings setAccountKey:[data valueForKey:@"accountKey"]];
     [QBSettings setApiEndpoint:[data valueForKey:@"apiEndPoint"] chatEndpoint:[data valueForKey:@"chatEndPoint"] forServiceZone:QBConnectionZoneTypeProduction];
     [QBSettings setServiceZone:QBConnectionZoneTypeProduction];
+    [QBSettings setAutoReconnectEnabled:YES];
     [QBSettings setLogLevel:(QBLogLevel)QBLogLevelNothing]; //QBLogLevelDebug,QBLogLevelNothing
     //[QBSettings enableXMPPLogging];
     
@@ -216,6 +217,14 @@ RCT_EXPORT_METHOD(hangUpCall:(RCTPromiseResolveBlock)resolve
         return;
     }
     self.session = session;
+}
+
+- (void)chatDidAccidentallyDisconnect{
+    [self sendEventWithName:@"disconnected" body:nil];
+}
+
+- (void)chatDidReconnect{
+    [self sendEventWithName:@"reconnected" body:nil];
 }
 
 - (void)dealloc {

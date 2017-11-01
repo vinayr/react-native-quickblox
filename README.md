@@ -84,6 +84,8 @@ QuickBlox.on('rtcState', (state) => {
   //'CALL_NEW', 'CALL_PENDING', 'CALL_CONNECTING'
   //'CALL_CONNECTED', 'CALL_CLOSED'
 });
+- `disconnected` - disconnected from chat
+- `reconnected` - reconnected to chat
 ```
 
 Note - Don't forget to add `ios/Pods/` to `.gitignore`

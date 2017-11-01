@@ -17,6 +17,8 @@ QuickBlox.rejectCall = userIDs => RNQuickBlox.rejectCall();
 const eventsMap = {
   chatMessage: 'chatMessage',
   rtcState: 'rtcState',
+  disconnected: 'disconnected',
+  reconnected: 'reconnected',
 };
 
 QuickBlox.on = (event, callback) => {
