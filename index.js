@@ -9,7 +9,7 @@ QuickBlox.login = (username, password) => RNQuickBlox.login(username, password);
 QuickBlox.joinChatDialog = () => RNQuickBlox.joinChatDialog();
 QuickBlox.sendMessage = (msg, params) => RNQuickBlox.sendMessage(msg, params);
 QuickBlox.getMessages = filters => RNQuickBlox.getMessages(filters);
-QuickBlox.startCall = userIDs => RNQuickBlox.startCall(userIDs);
+QuickBlox.startCall = (userIDs, params) => RNQuickBlox.startCall(userIDs, params);
 QuickBlox.hangUpCall = userIDs => RNQuickBlox.hangUpCall();
 QuickBlox.acceptCall = userIDs => RNQuickBlox.acceptCall();
 QuickBlox.rejectCall = userIDs => RNQuickBlox.rejectCall();

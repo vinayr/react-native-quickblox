@@ -119,12 +119,13 @@ RCT_EXPORT_METHOD(getMessages:(NSDictionary *)filters
 }
 
 RCT_EXPORT_METHOD(startCall:(NSArray *)userIDs
+                  params:(NSDictionary *)params
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
     self.session = [[QBRTCClient instance] createNewSessionWithOpponents:userIDs
                                                       withConferenceType:QBRTCConferenceTypeAudio];
-    [self.session startCall:nil];
+    [self.session startCall:params];
     resolve(nil);
 }
 

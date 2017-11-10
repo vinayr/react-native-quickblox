@@ -50,7 +50,7 @@ QuickBlox.joinChatDialog();
 let msg = "Hi";
 let params = {
   save_to_history: 1,
-  customParam: 123,
+  customParam: 123
 };
 QuickBlox.sendMessage(msg, params);
 ```
@@ -59,13 +59,16 @@ let filters = {
   'limit': 10,
   'skip': 10,
   'message[ne]': null,
-  'sort_desc': 'date_sent',
+  'sort_desc': 'date_sent'
 };
 QuickBlox.getMessages(filters);
 ```
 ```js
 let callUserIDs = [123];
-QuickBlox.startCall(callUserIDs);
+let params = {
+  customParam: 123
+};
+QuickBlox.startCall(callUserIDs, params);
 QuickBlox.hangUpCall();
 QuickBlox.acceptCall();
 QuickBlox.rejectCall();
