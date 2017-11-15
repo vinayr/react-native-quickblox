@@ -70,7 +70,7 @@ RCT_EXPORT_METHOD(joinChatDialog:(RCTPromiseResolveBlock)resolve
 
         if (chatDialog.isJoined) {
             self.dialog = chatDialog;
-            resolve(nil);
+            resolve(chatDialog.occupantIDs);
             return;
         }
         
@@ -79,7 +79,7 @@ RCT_EXPORT_METHOD(joinChatDialog:(RCTPromiseResolveBlock)resolve
                 reject(nil, [NSString stringWithFormat:@"%@", error], nil);
             } else {
                 self.dialog = chatDialog;
-                resolve(nil);
+                resolve(chatDialog.occupantIDs);
             }
         }];
     } errorBlock:^(QBResponse *response) {
