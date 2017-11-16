@@ -169,7 +169,7 @@ RCT_EXPORT_METHOD(hangUpCall:(RCTPromiseResolveBlock)resolve
     }
     return @{
              @"ID": message.ID,
-             @"senderID": [NSString stringWithFormat:@"%lu", message.senderID],
+             @"senderID": [NSString stringWithFormat:@"%lu", (unsigned long)message.senderID],
              @"dateSent": @(message.dateSent.timeIntervalSince1970 * 1000),
              @"text": RCTNullIfNil(message.text),
              @"customParameters": RCTNullIfNil(message.customParameters)
